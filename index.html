@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador Avançado de Física - Movimento de Projéteis</title>
+    <title>Quiz História do Brasil</title>
     <style>
+        /* Reset e configurações gerais */
         * {
             margin: 0;
             padding: 0;
@@ -12,475 +13,275 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        :root {
-            --primary: #4d9eff;
-            --secondary: #ff6b6b;
-            --accent: #6cff4d;
-            --dark: #0a1a3a;
-            --light: #aad2ff;
-            --background: linear-gradient(135deg, #1a2a6c, #2a4d8e, #3a70b0);
-        }
-
         body {
-            background: var(--background);
-            color: #fff;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             padding: 20px;
-            overflow-x: hidden;
         }
 
         .container {
             width: 100%;
-            max-width: 1400px;
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        header {
-            text-align: center;
-            padding: 25px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 20px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(to right, var(--primary), var(--secondary), var(--accent));
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
-            background: linear-gradient(to right, var(--light), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .subtitle {
-            font-size: 1.3rem;
-            opacity: 0.9;
             max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.5;
-        }
-
-        .content {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 25px;
-        }
-
-        .control-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .panel {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
+            background-color: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .panel:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        h2 {
-            font-size: 1.6rem;
-            margin-bottom: 20px;
-            color: var(--light);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        h2::before {
-            content: '';
-            width: 5px;
-            height: 25px;
-            background: var(--primary);
-            border-radius: 3px;
-        }
-
-        .slider-container {
-            margin-bottom: 20px;
-        }
-
-        .slider-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .slider {
-            width: 100%;
-            height: 10px;
-            -webkit-appearance: none;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            outline: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
         }
 
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: var(--primary);
-            cursor: pointer;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
-            border: 2px solid white;
-            transition: all 0.2s ease;
-        }
-
-        .slider::-webkit-slider-thumb:hover {
-            transform: scale(1.1);
-            background: var(--light);
-        }
-
-        .value-display {
-            font-weight: bold;
-            color: var(--light);
-            background: rgba(0, 0, 0, 0.3);
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
-
-        .button-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 15px;
-        }
-
-        button {
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            background: var(--primary);
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 1rem;
-        }
-
-        button:hover {
-            background: var(--light);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        button:active {
-            transform: translateY(1px);
-        }
-
-        button.reset {
-            background: var(--secondary);
-        }
-
-        button.reset:hover {
-            background: #ff5252;
-        }
-
-        button.compare {
-            background: var(--accent);
-            color: var(--dark);
-        }
-
-        button.compare:hover {
-            background: #5ce83d;
-        }
-
-        .canvas-container {
-            position: relative;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        canvas {
-            display: block;
-            background: var(--dark);
-        }
-
-        .canvas-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .info-panel {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-
-        .data-display {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .data-item {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            transition: transform 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .data-item:hover {
-            transform: translateY(-5px);
-            background: rgba(0, 0, 0, 0.4);
-        }
-
-        .data-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 8px;
-        }
-
-        .data-value {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: var(--light);
-        }
-
-        .theory {
-            margin-top: 20px;
-            line-height: 1.6;
-        }
-
-        .theory h3 {
-            color: var(--light);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .theory h3::before {
-            content: '📚';
-        }
-
-        .theory p {
-            margin-bottom: 12px;
-            text-align: justify;
-        }
-
-        .theory-equation {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border-left: 4px solid var(--primary);
-        }
-
-        .equation {
-            font-family: 'Courier New', monospace;
-            font-size: 1.1rem;
-            color: var(--light);
-            margin: 8px 0;
-        }
-
-        .comparison-panel {
-            grid-column: 1 / -1;
-        }
-
-        .comparison-controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 15px;
-        }
-
-        .comparison-item {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 12px;
-        }
-
-        .trail-options {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .trail-option {
-            flex: 1;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
-        }
-
-        .trail-option.active {
-            background: var(--primary);
-            border-color: var(--light);
-        }
-
-        /* Painel de Resumo */
-        .summary-panel {
-            grid-column: 1 / -1;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease, padding 0.5s ease;
-        }
-
-        .summary-panel.active {
-            max-height: 1000px;
-            padding: 25px;
-        }
-
-        .summary-content {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
-        }
-
-        .summary-panel.active .summary-content {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .summary-section {
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .summary-section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-
-        .conclusion-box {
-            background: linear-gradient(135deg, var(--primary), #2a4d8e);
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
-            border-left: 5px solid var(--accent);
-        }
-
-        .key-points {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .key-point {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid var(--accent);
-        }
-
-        .analysis-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .analysis-item:last-child {
-            border-bottom: none;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 25px;
-            padding: 20px;
-            font-size: 0.9rem;
-            opacity: 0.8;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            width: 100%;
-        }
-
-        /* Animações */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        header {
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
         }
 
-        .pulse {
-            animation: pulse 2s infinite;
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .screen {
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .active {
+            display: block;
+        }
+
+        .welcome-screen {
+            text-align: center;
+        }
+
+        .welcome-screen h2 {
+            color: #1a2a6c;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .welcome-screen p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            margin: 10px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .question-screen .question-number {
+            font-size: 1.2rem;
+            color: #b21f1f;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .question-screen .question-text {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #1a2a6c;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option {
+            background-color: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .option:hover {
+            background-color: #e9e9e9;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background-color: #1a2a6c;
+            color: white;
+            border-color: #1a2a6c;
+        }
+
+        .option.correct {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .option.incorrect {
+            background-color: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .results-screen {
+            text-align: center;
+        }
+
+        .results-screen h2 {
+            color: #1a2a6c;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .score {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #1a2a6c;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .score-message {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .feedback {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .feedback h3 {
+            color: #1a2a6c;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .feedback-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .feedback-question {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .feedback-answer {
+            color: #666;
+        }
+
+        .feedback-correct {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .feedback-incorrect {
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #f5f5f5;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #ddd;
         }
 
         /* Responsividade */
-        @media (max-width: 1100px) {
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
             .content {
-                grid-template-columns: 1fr;
+                padding: 20px;
             }
             
-            .canvas-container {
-                order: -1;
-            }
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.2rem;
+            .question-screen .question-text {
+                font-size: 1.2rem;
             }
             
-            .subtitle {
-                font-size: 1.1rem;
-            }
-            
-            .info-panel {
-                grid-template-columns: 1fr;
-            }
-            
-            .comparison-controls {
-                grid-template-columns: 1fr;
+            .score {
+                font-size: 4rem;
             }
         }
     </style>
@@ -488,1015 +289,313 @@
 <body>
     <div class="container">
         <header>
-            <h1>Simulador Avançado de Física</h1>
-            <p class="subtitle">Explore o movimento de projéteis em diferentes condições ambientais. Ajuste parâmetros, compare trajetórias e visualize dados em tempo real.</p>
+            <h1>Quiz História do Brasil</h1>
+            <p>Teste seus conhecimentos sobre a história do nosso país</p>
         </header>
         
         <div class="content">
-            <div class="control-panel">
-                <div class="panel">
-                    <h2>⚙️ Controles do Lançamento</h2>
-                    
-                    <div class="slider-container">
-                        <div class="slider-label">
-                            <span>Ângulo de Lançamento</span>
-                            <span class="value-display" id="angle-value">45°</span>
-                        </div>
-                        <input type="range" min="0" max="90" value="45" class="slider" id="angle-slider">
-                    </div>
-                    
-                    <div class="slider-container">
-                        <div class="slider-label">
-                            <span>Velocidade Inicial</span>
-                            <span class="value-display" id="velocity-value">50 m/s</span>
-                        </div>
-                        <input type="range" min="10" max="100" value="50" class="slider" id="velocity-slider">
-                    </div>
-                    
-                    <div class="slider-container">
-                        <div class="slider-label">
-                            <span>Altura Inicial</span>
-                            <span class="value-display" id="height-value">10 m</span>
-                        </div>
-                        <input type="range" min="0" max="50" value="10" class="slider" id="height-slider">
-                    </div>
-                    
-                    <div class="button-group">
-                        <button id="launch-btn">🚀 Lançar Projétil</button>
-                        <button id="reset-btn" class="reset">🔄 Reiniciar</button>
-                    </div>
-                </div>
-                
-                <div class="panel">
-                    <h2>🌍 Ambiente de Simulação</h2>
-                    
-                    <div class="slider-container">
-                        <div class="slider-label">
-                            <span>Gravidade</span>
-                            <span class="value-display" id="gravity-value">9.8 m/s²</span>
-                        </div>
-                        <input type="range" min="1" max="20" value="9.8" step="0.1" class="slider" id="gravity-slider">
-                    </div>
-                    
-                    <div class="slider-container">
-                        <div class="slider-label">
-                            <span>Resistência do Ar</span>
-                            <span class="value-display" id="resistance-value">0.1</span>
-                        </div>
-                        <input type="range" min="0" max="1" value="0.1" step="0.01" class="slider" id="resistance-slider">
-                    </div>
-                    
-                    <div class="slider-container">
-                        <div class="slider-label">
-                            <span>Vento</span>
-                            <span class="value-display" id="wind-value">0 m/s</span>
-                        </div>
-                        <input type="range" min="-20" max="20" value="0" class="slider" id="wind-slider">
-                    </div>
-                </div>
-                
-                <div class="panel">
-                    <h2>🎯 Visualização</h2>
-                    
-                    <div class="slider-container">
-                        <div class="slider-label">
-                            <span>Velocidade de Simulação</span>
-                            <span class="value-display" id="speed-value">1.0x</span>
-                        </div>
-                        <input type="range" min="0.1" max="3" value="1" step="0.1" class="slider" id="speed-slider">
-                    </div>
-                    
-                    <div class="trail-options">
-                        <div class="trail-option active" data-trail="solid">Linha Sólida</div>
-                        <div class="trail-option" data-trail="dashed">Linha Tracejada</div>
-                        <div class="trail-option" data-trail="dots">Pontos</div>
-                    </div>
-                    
-                    <div class="button-group">
-                        <button id="compare-btn" class="compare">🔍 Modo Comparação</button>
-                        <button id="clear-btn">🗑️ Limpar Tudo</button>
-                    </div>
+            <!-- Tela de boas-vindas -->
+            <div id="welcome-screen" class="screen active">
+                <div class="welcome-screen">
+                    <h2>Bem-vindo ao Quiz de História do Brasil!</h2>
+                    <p>Este quiz contém 10 perguntas sobre diversos períodos da história brasileira.</p>
+                    <p>Teste seus conhecimentos e descubra o quanto você sabe sobre nosso país!</p>
+                    <p>Para cada pergunta, selecione a resposta que você considera correta.</p>
+                    <button id="start-btn" class="btn">Iniciar Quiz</button>
                 </div>
             </div>
             
-            <div class="canvas-container">
-                <canvas id="simulation-canvas"></canvas>
-                <div class="canvas-overlay" id="canvas-overlay"></div>
-            </div>
-        </div>
-        
-        <div class="info-panel">
-            <div class="panel">
-                <h2>📊 Dados do Movimento</h2>
-                <div class="data-display">
-                    <div class="data-item">
-                        <div class="data-label">Altura Máxima</div>
-                        <div class="data-value" id="max-height">0 m</div>
-                    </div>
-                    <div class="data-item">
-                        <div class="data-label">Alcance Horizontal</div>
-                        <div class="data-value" id="horizontal-range">0 m</div>
-                    </div>
-                    <div class="data-item">
-                        <div class="data-label">Tempo de Voo</div>
-                        <div class="data-value" id="flight-time">0 s</div>
-                    </div>
-                    <div class="data-item">
-                        <div class="data-label">Velocidade Final</div>
-                        <div class="data-value" id="final-velocity">0 m/s</div>
-                    </div>
-                    <div class="data-item">
-                        <div class="data-label">Energia Cinética</div>
-                        <div class="data-value" id="kinetic-energy">0 J</div>
-                    </div>
-                    <div class="data-item">
-                        <div class="data-label">Energia Potencial Máx.</div>
-                        <div class="data-value" id="potential-energy">0 J</div>
-                    </div>
+            <!-- Tela de perguntas -->
+            <div id="question-screen" class="screen">
+                <div class="progress-bar">
+                    <div class="progress" id="progress-bar"></div>
+                </div>
+                <div class="question-number" id="question-number">Pergunta 1 de 10</div>
+                <div class="question-text" id="question-text"></div>
+                <div class="options" id="options-container"></div>
+                <div class="navigation">
+                    <button id="prev-btn" class="btn hidden">Anterior</button>
+                    <button id="next-btn" class="btn">Próxima</button>
                 </div>
             </div>
             
-            <div class="panel">
-                <h2>📈 Gráfico de Trajetória</h2>
-                <canvas id="graph-canvas" height="200"></canvas>
-            </div>
-            
-            <div class="panel comparison-panel">
-                <h2>🔬 Modo Comparação</h2>
-                <div class="comparison-controls">
-                    <div class="comparison-item">
-                        <h3>Projétil 1</h3>
-                        <div class="slider-container">
-                            <div class="slider-label">
-                                <span>Ângulo</span>
-                                <span class="value-display" id="compare-angle1">45°</span>
-                            </div>
-                            <input type="range" min="0" max="90" value="45" class="slider" id="compare-angle1-slider">
-                        </div>
-                        <div class="slider-container">
-                            <div class="slider-label">
-                                <span>Velocidade</span>
-                                <span class="value-display" id="compare-velocity1">50 m/s</span>
-                            </div>
-                            <input type="range" min="10" max="100" value="50" class="slider" id="compare-velocity1-slider">
-                        </div>
-                    </div>
+            <!-- Tela de resultados -->
+            <div id="results-screen" class="screen">
+                <div class="results-screen">
+                    <h2>Quiz Concluído!</h2>
+                    <div class="score" id="final-score">0%</div>
+                    <div class="score-message" id="score-message"></div>
+                    <button id="restart-btn" class="btn">Fazer Novamente</button>
+                    <button id="review-btn" class="btn">Revisar Respostas</button>
                     
-                    <div class="comparison-item">
-                        <h3>Projétil 2</h3>
-                        <div class="slider-container">
-                            <div class="slider-label">
-                                <span>Ângulo</span>
-                                <span class="value-display" id="compare-angle2">60°</span>
-                            </div>
-                            <input type="range" min="0" max="90" value="60" class="slider" id="compare-angle2-slider">
-                        </div>
-                        <div class="slider-container">
-                            <div class="slider-label">
-                                <span>Velocidade</span>
-                                <span class="value-display" id="compare-velocity2">50 m/s</span>
-                            </div>
-                            <input type="range" min="10" max="100" value="50" class="slider" id="compare-velocity2-slider">
-                        </div>
+                    <div class="feedback hidden" id="feedback-container">
+                        <h3>Revisão das Respostas</h3>
+                        <div id="feedback-items"></div>
                     </div>
-                </div>
-                <button id="launch-compare-btn" class="compare" style="margin-top: 15px; width: 100%;">🚀 Lançar Comparação</button>
-            </div>
-        </div>
-
-        <!-- Painel de Resumo Educacional -->
-        <div class="panel summary-panel" id="summary-panel">
-            <div class="summary-content">
-                <h2>📋 Resumo da Simulação</h2>
-                
-                <div class="summary-section">
-                    <h3>🎯 Análise do Movimento</h3>
-                    <div id="motion-analysis">
-                        <p>Execute uma simulação para ver a análise detalhada do movimento do projétil...</p>
-                    </div>
-                </div>
-                
-                <div class="summary-section">
-                    <h3>📊 Comparação com Teoria Ideal</h3>
-                    <div class="analysis-item">
-                        <span>Alcance Real vs. Teórico:</span>
-                        <span id="range-comparison">-</span>
-                    </div>
-                    <div class="analysis-item">
-                        <span>Altura Máxima Real vs. Teórica:</span>
-                        <span id="height-comparison">-</span>
-                    </div>
-                    <div class="analysis-item">
-                        <span>Eficiência da Trajetória:</span>
-                        <span id="efficiency">-</span>
-                    </div>
-                </div>
-                
-                <div class="summary-section">
-                    <h3>💡 Conceitos Físicos Demonstrados</h3>
-                    <div class="key-points" id="physics-concepts">
-                        <div class="key-point">
-                            <strong>Movimento Parabólico</strong>
-                            <p>Composição de movimento horizontal uniforme e vertical uniformemente variado</p>
-                        </div>
-                        <div class="key-point">
-                            <strong>Conservação de Energia</strong>
-                            <p>Transformação entre energia cinética e potencial gravitacional</p>
-                        </div>
-                        <div class="key-point">
-                            <strong>Decomposição de Vetores</strong>
-                            <p>Velocidade inicial decomposta em componentes horizontal e vertical</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="summary-section">
-                    <h3>🎓 Aprendizados Principais</h3>
-                    <div id="key-learnings">
-                        <p>Os principais conceitos demonstrados nesta simulação incluem...</p>
-                    </div>
-                </div>
-                
-                <div class="conclusion-box">
-                    <h3>✅ Conclusão</h3>
-                    <p id="conclusion-text">Esta simulação demonstra os princípios fundamentais do movimento de projéteis. Execute diferentes configurações para explorar como os parâmetros afetam a trajetória!</p>
                 </div>
             </div>
         </div>
         
         <footer>
-            <p>Simulador Avançado de Física - Movimento de Projéteis | Projeto Educacional Interativo</p>
+            <p>Projeto Educacional - Quiz Interativo de História do Brasil</p>
         </footer>
     </div>
 
     <script>
-        // Elementos do DOM
-        const canvas = document.getElementById('simulation-canvas');
-        const ctx = canvas.getContext('2d');
-        const graphCanvas = document.getElementById('graph-canvas');
-        const graphCtx = graphCanvas.getContext('2d');
-        const summaryPanel = document.getElementById('summary-panel');
-        
-        // Controles
-        const angleSlider = document.getElementById('angle-slider');
-        const velocitySlider = document.getElementById('velocity-slider');
-        const heightSlider = document.getElementById('height-slider');
-        const gravitySlider = document.getElementById('gravity-slider');
-        const resistanceSlider = document.getElementById('resistance-slider');
-        const windSlider = document.getElementById('wind-slider');
-        const speedSlider = document.getElementById('speed-slider');
-        
-        const angleValue = document.getElementById('angle-value');
-        const velocityValue = document.getElementById('velocity-value');
-        const heightValue = document.getElementById('height-value');
-        const gravityValue = document.getElementById('gravity-value');
-        const resistanceValue = document.getElementById('resistance-value');
-        const windValue = document.getElementById('wind-value');
-        const speedValue = document.getElementById('speed-value');
-        
-        const launchBtn = document.getElementById('launch-btn');
-        const resetBtn = document.getElementById('reset-btn');
-        const compareBtn = document.getElementById('compare-btn');
-        const clearBtn = document.getElementById('clear-btn');
-        const launchCompareBtn = document.getElementById('launch-compare-btn');
-        
-        // Controles de comparação
-        const compareAngle1Slider = document.getElementById('compare-angle1-slider');
-        const compareVelocity1Slider = document.getElementById('compare-velocity1-slider');
-        const compareAngle2Slider = document.getElementById('compare-angle2-slider');
-        const compareVelocity2Slider = document.getElementById('compare-velocity2-slider');
-        
-        const compareAngle1Value = document.getElementById('compare-angle1');
-        const compareVelocity1Value = document.getElementById('compare-velocity1');
-        const compareAngle2Value = document.getElementById('compare-angle2');
-        const compareVelocity2Value = document.getElementById('compare-velocity2');
-        
-        // Display de dados
-        const maxHeightDisplay = document.getElementById('max-height');
-        const horizontalRangeDisplay = document.getElementById('horizontal-range');
-        const flightTimeDisplay = document.getElementById('flight-time');
-        const finalVelocityDisplay = document.getElementById('final-velocity');
-        const kineticEnergyDisplay = document.getElementById('kinetic-energy');
-        const potentialEnergyDisplay = document.getElementById('potential-energy');
-        
-        // Elementos do resumo
-        const motionAnalysis = document.getElementById('motion-analysis');
-        const rangeComparison = document.getElementById('range-comparison');
-        const heightComparison = document.getElementById('height-comparison');
-        const efficiency = document.getElementById('efficiency');
-        const keyLearnings = document.getElementById('key-learnings');
-        const conclusionText = document.getElementById('conclusion-text');
-        
-        // Opções de trilha
-        const trailOptions = document.querySelectorAll('.trail-option');
-        
-        // Variáveis de simulação
-        let angle = 45;
-        let velocity = 50;
-        let initialHeight = 10;
-        let gravity = 9.8;
-        let airResistance = 0.1;
-        let wind = 0;
-        let simulationSpeed = 1;
-        let trailStyle = 'solid';
-        
-        let projectiles = [];
-        let animationId;
-        let isRunning = false;
-        let comparisonMode = false;
-        let mass = 1; // kg para cálculos de energia
-        
-        // Configuração do canvas
-        function setupCanvas() {
-            const container = canvas.parentElement;
-            canvas.width = container.clientWidth;
-            canvas.height = Math.min(container.clientWidth * 0.6, 600);
-            
-            graphCanvas.width = container.clientWidth;
+        // Banco de perguntas sobre História do Brasil
+        const questions = [
+            {
+                question: "Em que ano o Brasil foi descoberto pelos portugueses?",
+                options: ["1492", "1500", "1520", "1540"],
+                correct: 1,
+                explanation: "O Brasil foi descoberto em 22 de abril de 1500 pela expedição portuguesa comandada por Pedro Álvares Cabral."
+            },
+            {
+                question: "Qual foi o primeiro nome dado ao Brasil pelos portugueses?",
+                options: ["Terra de Vera Cruz", "Ilha de Santa Cruz", "Terra de Santa Cruz", "Província de Santa Cruz"],
+                correct: 2,
+                explanation: "Inicialmente, o Brasil foi chamado de 'Ilha de Vera Cruz', mas logo depois o nome foi alterado para 'Terra de Santa Cruz'."
+            },
+            {
+                question: "Quem foi o primeiro governador-geral do Brasil?",
+                options: ["Mem de Sá", "Tomé de Sousa", "Duarte da Costa", "Martim Afonso de Sousa"],
+                correct: 1,
+                explanation: "Tomé de Sousa foi nomeado como primeiro governador-geral do Brasil em 1549, com a tarefa de centralizar a administração da colônia."
+            },
+            {
+                question: "Qual foi o principal produto de exportação do Brasil durante o ciclo econômico do século XVII?",
+                options: ["Café", "Ouro", "Açúcar", "Algodão"],
+                correct: 2,
+                explanation: "O açúcar foi o principal produto de exportação brasileiro durante o século XVII, especialmente no Nordeste, onde foram instalados os engenhos."
+            },
+            {
+                question: "Em que ano a família real portuguesa transferiu-se para o Brasil?",
+                options: ["1808", "1815", "1820", "1822"],
+                correct: 0,
+                explanation: "Em 1808, a família real portuguesa, fugindo das tropas napoleônicas, transferiu a corte para o Brasil, o que trouxe significativas mudanças para a colônia."
+            },
+            {
+                question: "Qual foi o último imperador do Brasil?",
+                options: ["Dom Pedro I", "Dom Pedro II", "Dom João VI", "Dom Miguel I"],
+                correct: 1,
+                explanation: "Dom Pedro II foi o segundo e último imperador do Brasil, governando de 1840 até a Proclamação da República em 1889."
+            },
+            {
+                question: "Em que ano a Lei Áurea foi assinada, abolindo a escravidão no Brasil?",
+                options: ["1850", "1871", "1885", "1888"],
+                correct: 3,
+                explanation: "A Lei Áurea foi assinada pela princesa Isabel em 13 de maio de 1888, extinguindo oficialmente a escravidão no Brasil."
+            },
+            {
+                question: "Quem foi o primeiro presidente do Brasil após a Proclamação da República?",
+                options: ["Floriano Peixoto", "Deodoro da Fonseca", "Prudente de Morais", "Campos Sales"],
+                correct: 1,
+                explanation: "Marechal Deodoro da Fonseca foi o primeiro presidente do Brasil após a Proclamação da República em 15 de novembro de 1889."
+            },
+            {
+                question: "Qual foi o movimento político que levou Getúlio Vargas ao poder em 1930?",
+                options: ["Revolução Constitucionalista", "Revolução de 1930", "Intentona Comunista", "Movimento Tenentista"],
+                correct: 1,
+                explanation: "A Revolução de 1930 foi um movimento armado liderado pelos estados de Minas Gerais, Paraíba e Rio Grande do Sul que culminou com o golpe de Estado que depôs o presidente Washington Luís."
+            },
+            {
+                question: "Em que ano a capital do Brasil foi transferida para Brasília?",
+                options: ["1956", "1960", "1964", "1970"],
+                correct: 1,
+                explanation: "Brasília foi inaugurada em 21 de abril de 1960, durante o governo de Juscelino Kubitschek, tornando-se a nova capital do Brasil."
+            }
+        ];
+
+        // Variáveis do estado do quiz
+        let currentQuestion = 0;
+        let userAnswers = Array(questions.length).fill(null);
+        let score = 0;
+        let quizCompleted = false;
+
+        // Elementos DOM
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const questionScreen = document.getElementById('question-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const startBtn = document.getElementById('start-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const questionNumber = document.getElementById('question-number');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const progressBar = document.getElementById('progress-bar');
+        const finalScore = document.getElementById('final-score');
+        const scoreMessage = document.getElementById('score-message');
+        const restartBtn = document.getElementById('restart-btn');
+        const reviewBtn = document.getElementById('review-btn');
+        const feedbackContainer = document.getElementById('feedback-container');
+        const feedbackItems = document.getElementById('feedback-items');
+
+        // Iniciar o quiz
+        startBtn.addEventListener('click', startQuiz);
+
+        function startQuiz() {
+            welcomeScreen.classList.remove('active');
+            questionScreen.classList.add('active');
+            showQuestion();
         }
-        
-        // Atualizar valores dos controles
-        function updateControlValues() {
-            angleValue.textContent = `${angle}°`;
-            velocityValue.textContent = `${velocity} m/s`;
-            heightValue.textContent = `${initialHeight} m`;
-            gravityValue.textContent = `${gravity.toFixed(1)} m/s²`;
-            resistanceValue.textContent = airResistance.toFixed(2);
-            windValue.textContent = `${wind} m/s`;
-            speedValue.textContent = `${simulationSpeed.toFixed(1)}x`;
+
+        // Mostrar pergunta atual
+        function showQuestion() {
+            const question = questions[currentQuestion];
             
-            // Atualizar controles de comparação
-            compareAngle1Value.textContent = `${compareAngle1Slider.value}°`;
-            compareVelocity1Value.textContent = `${compareVelocity1Slider.value} m/s`;
-            compareAngle2Value.textContent = `${compareAngle2Slider.value}°`;
-            compareVelocity2Value.textContent = `${compareVelocity2Slider.value} m/s`;
-        }
-        
-        // Inicialização
-        function init() {
-            setupCanvas();
-            updateControlValues();
-            drawStaticElements();
-            setupGraph();
+            // Atualizar número da pergunta
+            questionNumber.textContent = `Pergunta ${currentQuestion + 1} de ${questions.length}`;
             
-            // Event listeners para os controles
-            const sliders = [
-                angleSlider, velocitySlider, heightSlider, gravitySlider, 
-                resistanceSlider, windSlider, speedSlider,
-                compareAngle1Slider, compareVelocity1Slider,
-                compareAngle2Slider, compareVelocity2Slider
-            ];
+            // Atualizar texto da pergunta
+            questionText.textContent = question.question;
             
-            sliders.forEach(slider => {
-                slider.addEventListener('input', function() {
-                    if (this.id.includes('angle')) angle = parseInt(this.value);
-                    if (this.id.includes('velocity')) velocity = parseInt(this.value);
-                    if (this.id === 'height-slider') initialHeight = parseInt(this.value);
-                    if (this.id === 'gravity-slider') gravity = parseFloat(this.value);
-                    if (this.id === 'resistance-slider') airResistance = parseFloat(this.value);
-                    if (this.id === 'wind-slider') wind = parseInt(this.value);
-                    if (this.id === 'speed-slider') simulationSpeed = parseFloat(this.value);
-                    
-                    updateControlValues();
-                    if (!isRunning) drawStaticElements();
-                });
-            });
+            // Atualizar barra de progresso
+            progressBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
             
-            // Event listeners para botões
-            launchBtn.addEventListener('click', launchProjectile);
-            resetBtn.addEventListener('click', resetSimulation);
-            compareBtn.addEventListener('click', toggleComparisonMode);
-            clearBtn.addEventListener('click', clearProjectiles);
-            launchCompareBtn.addEventListener('click', launchComparison);
+            // Limpar opções anteriores
+            optionsContainer.innerHTML = '';
             
-            // Event listeners para opções de trilha
-            trailOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    trailOptions.forEach(opt => opt.classList.remove('active'));
-                    this.classList.add('active');
-                    trailStyle = this.dataset.trail;
-                    
-                    // Atualizar trilhas dos projéteis existentes
-                    projectiles.forEach(p => p.trailStyle = trailStyle);
-                });
-            });
-            
-            window.addEventListener('resize', function() {
-                setupCanvas();
-                drawStaticElements();
-                setupGraph();
-                drawGraph();
-            });
-        }
-        
-        // Configurar gráfico
-        function setupGraph() {
-            graphCtx.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
-        }
-        
-        // Desenhar gráfico de trajetória
-        function drawGraph() {
-            graphCtx.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
-            
-            if (projectiles.length === 0) return;
-            
-            const padding = 40;
-            const graphWidth = graphCanvas.width - padding * 2;
-            const graphHeight = graphCanvas.height - padding * 2;
-            
-            // Encontrar valores máximos para escala
-            let maxX = 0;
-            let maxY = 0;
-            
-            projectiles.forEach(projectile => {
-                projectile.trail.forEach(point => {
-                    if (point.x > maxX) maxX = point.x;
-                    if (point.y > maxY) maxY = point.y;
-                });
-            });
-            
-            // Desenhar eixos
-            graphCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-            graphCtx.lineWidth = 1;
-            
-            // Eixo X
-            graphCtx.beginPath();
-            graphCtx.moveTo(padding, graphCanvas.height - padding);
-            graphCtx.lineTo(graphCanvas.width - padding, graphCanvas.height - padding);
-            graphCtx.stroke();
-            
-            // Eixo Y
-            graphCtx.beginPath();
-            graphCtx.moveTo(padding, padding);
-            graphCtx.lineTo(padding, graphCanvas.height - padding);
-            graphCtx.stroke();
-            
-            // Desenhar trajetórias
-            const colors = ['#4d9eff', '#ff6b6b', '#6cff4d', '#ffd166', '#9d4edd'];
-            
-            projectiles.forEach((projectile, index) => {
-                if (projectile.trail.length < 2) return;
+            // Adicionar novas opções
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option');
                 
-                const color = colors[index % colors.length];
-                graphCtx.strokeStyle = color;
-                graphCtx.lineWidth = 2;
-                graphCtx.beginPath();
-                
-                projectile.trail.forEach((point, i) => {
-                    const x = padding + (point.x / maxX) * graphWidth;
-                    const y = graphCanvas.height - padding - (point.y / maxY) * graphHeight;
-                    
-                    if (i === 0) {
-                        graphCtx.moveTo(x, y);
-                    } else {
-                        graphCtx.lineTo(x, y);
-                    }
-                });
-                
-                graphCtx.stroke();
-            });
-            
-            // Rótulos dos eixos
-            graphCtx.fillStyle = 'white';
-            graphCtx.font = '12px Arial';
-            graphCtx.fillText('Distância (m)', graphCanvas.width / 2, graphCanvas.height - 10);
-            
-            graphCtx.save();
-            graphCtx.translate(10, graphCanvas.height / 2);
-            graphCtx.rotate(-Math.PI / 2);
-            graphCtx.fillText('Altura (m)', 0, 0);
-            graphCtx.restore();
-        }
-        
-        // Desenhar elementos estáticos
-        function drawStaticElements() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Desenhar céu com gradiente
-            const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            skyGradient.addColorStop(0, '#1a2a6c');
-            skyGradient.addColorStop(1, '#3a70b0');
-            ctx.fillStyle = skyGradient;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Desenhar nuvens
-            drawClouds();
-            
-            // Desenhar solo
-            const groundGradient = ctx.createLinearGradient(0, canvas.height - 50, 0, canvas.height);
-            groundGradient.addColorStop(0, '#5d4037');
-            groundGradient.addColorStop(1, '#3e2723');
-            ctx.fillStyle = groundGradient;
-            ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
-            
-            // Desenhar grama
-            ctx.fillStyle = '#388e3c';
-            ctx.fillRect(0, canvas.height - 50, canvas.width, 10);
-            
-            // Desenhar plataforma de lançamento
-            const launchX = 80;
-            const launchY = canvas.height - 50 - initialHeight * 5;
-            
-            ctx.fillStyle = '#78909c';
-            ctx.fillRect(launchX - 15, launchY - 15, 30, 15);
-            
-            // Desenhar linha de direção do lançamento
-            const angleRad = angle * Math.PI / 180;
-            const directionLength = 50;
-            
-            ctx.beginPath();
-            ctx.moveTo(launchX, launchY);
-            ctx.lineTo(
-                launchX + directionLength * Math.cos(angleRad),
-                launchY - directionLength * Math.sin(angleRad)
-            );
-            ctx.strokeStyle = '#ff9800';
-            ctx.lineWidth = 3;
-            ctx.stroke();
-            
-            // Desenhar projétil na posição inicial
-            ctx.fillStyle = '#f44336';
-            ctx.beginPath();
-            ctx.arc(launchX, launchY, 10, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Efeito de brilho no projétil
-            const glowGradient = ctx.createRadialGradient(launchX, launchY, 5, launchX, launchY, 15);
-            glowGradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
-            glowGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-            ctx.fillStyle = glowGradient;
-            ctx.fillRect(launchX - 15, launchY - 15, 30, 30);
-            
-            // Desenhar grade de referência
-            drawGrid();
-            
-            // Desenhar vetor de vento se aplicável
-            if (wind !== 0) {
-                const windX = canvas.width - 100;
-                const windY = 50;
-                const windDirection = wind > 0 ? 1 : -1;
-                const windStrength = Math.min(Math.abs(wind) / 5, 1);
-                
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(windX, windY);
-                ctx.lineTo(windX + windDirection * 60 * windStrength, windY);
-                ctx.stroke();
-                
-                // Seta
-                ctx.beginPath();
-                if (windDirection > 0) {
-                    ctx.moveTo(windX + 60 * windStrength, windY);
-                    ctx.lineTo(windX + 60 * windStrength - 10, windY - 5);
-                    ctx.lineTo(windX + 60 * windStrength - 10, windY + 5);
-                } else {
-                    ctx.moveTo(windX, windY);
-                    ctx.lineTo(windX + 10, windY - 5);
-                    ctx.lineTo(windX + 10, windY + 5);
+                // Verificar se esta opção foi selecionada anteriormente
+                if (userAnswers[currentQuestion] === index) {
+                    optionElement.classList.add('selected');
                 }
-                ctx.closePath();
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-                ctx.fill();
                 
-                ctx.fillStyle = 'white';
-                ctx.font = '14px Arial';
-                ctx.fillText(`Vento: ${wind} m/s`, windX - 50, windY - 10);
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => selectOption(index));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Atualizar botões de navegação
+            updateNavigationButtons();
+        }
+
+        // Selecionar uma opção
+        function selectOption(optionIndex) {
+            // Remover seleção anterior
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            
+            // Adicionar seleção atual
+            options[optionIndex].classList.add('selected');
+            
+            // Salvar resposta do usuário
+            userAnswers[currentQuestion] = optionIndex;
+            
+            // Habilitar botão próximo se não for a última pergunta
+            if (currentQuestion < questions.length - 1) {
+                nextBtn.disabled = false;
             }
         }
-        
-        // Desenhar nuvens
-        function drawClouds() {
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-            
-            // Nuvem 1
-            ctx.beginPath();
-            ctx.arc(150, 80, 20, 0, Math.PI * 2);
-            ctx.arc(180, 70, 25, 0, Math.PI * 2);
-            ctx.arc(210, 80, 20, 0, Math.PI * 2);
-            ctx.arc(180, 90, 20, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Nuvem 2
-            ctx.beginPath();
-            ctx.arc(400, 120, 25, 0, Math.PI * 2);
-            ctx.arc(430, 110, 30, 0, Math.PI * 2);
-            ctx.arc(460, 120, 25, 0, Math.PI * 2);
-            ctx.arc(430, 130, 25, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Nuvem 3
-            ctx.beginPath();
-            ctx.arc(600, 60, 15, 0, Math.PI * 2);
-            ctx.arc(630, 50, 20, 0, Math.PI * 2);
-            ctx.arc(660, 60, 15, 0, Math.PI * 2);
-            ctx.arc(630, 70, 15, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        
-        // Desenhar grade de referência
-        function drawGrid() {
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-            ctx.lineWidth = 1;
-            
-            // Linhas verticais
-            for (let x = 0; x < canvas.width; x += 50) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, canvas.height);
-                ctx.stroke();
-            }
-            
-            // Linhas horizontais
-            for (let y = 0; y < canvas.height; y += 50) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(canvas.width, y);
-                ctx.stroke();
-            }
-            
-            // Desenhar escala
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-            ctx.font = '12px Arial';
-            
-            // Escala horizontal (metros)
-            for (let x = 50; x < canvas.width; x += 50) {
-                ctx.fillText(`${x/5}m`, x, canvas.height - 10);
-            }
-            
-            // Escala vertical (metros)
-            for (let y = canvas.height - 50; y > 0; y -= 50) {
-                ctx.fillText(`${(canvas.height - y)/5}m`, 5, y);
-            }
-        }
-        
-        // Lançar projétil
-        function launchProjectile() {
-            if (isRunning) return;
-            
-            isRunning = true;
-            
-            const projectile = {
-                x: 80,
-                y: canvas.height - 50 - initialHeight * 5,
-                vx: velocity * Math.cos(angle * Math.PI / 180),
-                vy: -velocity * Math.sin(angle * Math.PI / 180),
-                trail: [],
-                maxHeight: initialHeight,
-                flightTime: 0,
-                landed: false,
-                color: `hsl(${Math.random() * 360}, 70%, 60%)`,
-                trailStyle: trailStyle,
-                mass: mass,
-                initialAngle: angle,
-                initialVelocity: velocity,
-                initialHeight: initialHeight
-            };
-            
-            projectiles.push(projectile);
-            
-            // Iniciar animação
-            animate();
-        }
-        
-        // Lançar comparação
-        function launchComparison() {
-            if (isRunning) return;
-            
-            isRunning = true;
-            comparisonMode = true;
-            
-            // Projétil 1
-            const projectile1 = {
-                x: 80,
-                y: canvas.height - 50 - initialHeight * 5,
-                vx: parseInt(compareVelocity1Slider.value) * Math.cos(parseInt(compareAngle1Slider.value) * Math.PI / 180),
-                vy: -parseInt(compareVelocity1Slider.value) * Math.sin(parseInt(compareAngle1Slider.value) * Math.PI / 180),
-                trail: [],
-                maxHeight: initialHeight,
-                flightTime: 0,
-                landed: false,
-                color: '#4d9eff',
-                trailStyle: trailStyle,
-                mass: mass,
-                initialAngle: parseInt(compareAngle1Slider.value),
-                initialVelocity: parseInt(compareVelocity1Slider.value),
-                initialHeight: initialHeight
-            };
-            
-            // Projétil 2
-            const projectile2 = {
-                x: 80,
-                y: canvas.height - 50 - initialHeight * 5,
-                vx: parseInt(compareVelocity2Slider.value) * Math.cos(parseInt(compareAngle2Slider.value) * Math.PI / 180),
-                vy: -parseInt(compareVelocity2Slider.value) * Math.sin(parseInt(compareAngle2Slider.value) * Math.PI / 180),
-                trail: [],
-                maxHeight: initialHeight,
-                flightTime: 0,
-                landed: false,
-                color: '#ff6b6b',
-                trailStyle: trailStyle,
-                mass: mass,
-                initialAngle: parseInt(compareAngle2Slider.value),
-                initialVelocity: parseInt(compareVelocity2Slider.value),
-                initialHeight: initialHeight
-            };
-            
-            projectiles.push(projectile1, projectile2);
-            
-            // Iniciar animação
-            animate();
-        }
-        
-        // Alternar modo de comparação
-        function toggleComparisonMode() {
-            comparisonMode = !comparisonMode;
-            compareBtn.textContent = comparisonMode ? '🔍 Sair do Modo Comparação' : '🔍 Modo Comparação';
-            compareBtn.classList.toggle('pulse', comparisonMode);
-        }
-        
-        // Limpar projéteis
-        function clearProjectiles() {
-            projectiles = [];
-            drawStaticElements();
-            setupGraph();
-            hideSummary();
-        }
-        
-        // Reiniciar simulação
-        function resetSimulation() {
-            isRunning = false;
-            projectiles = [];
-            comparisonMode = false;
-            compareBtn.textContent = '🔍 Modo Comparação';
-            compareBtn.classList.remove('pulse');
-            cancelAnimationFrame(animationId);
-            drawStaticElements();
-            setupGraph();
-            hideSummary();
-            
-            // Resetar displays
-            maxHeightDisplay.textContent = '0 m';
-            horizontalRangeDisplay.textContent = '0 m';
-            flightTimeDisplay.textContent = '0 s';
-            finalVelocityDisplay.textContent = '0 m/s';
-            kineticEnergyDisplay.textContent = '0 J';
-            potentialEnergyDisplay.textContent = '0 J';
-        }
-        
-        // Mostrar resumo
-        function showSummary() {
-            summaryPanel.classList.add('active');
-            generateSummary();
-        }
-        
-        // Ocultar resumo
-        function hideSummary() {
-            summaryPanel.classList.remove('active');
-        }
-        
-        // Gerar resumo da simulação
-        function generateSummary() {
-            if (projectiles.length === 0) return;
-            
-            const lastProjectile = projectiles[projectiles.length - 1];
-            
-            // Cálculos teóricos (sem resistência do ar)
-            const angleRad = lastProjectile.initialAngle * Math.PI / 180;
-            const v0 = lastProjectile.initialVelocity;
-            const h0 = lastProjectile.initialHeight;
-            
-            // Tempo de voo teórico
-            const theoreticalFlightTime = (v0 * Math.sin(angleRad) + Math.sqrt(
-                Math.pow(v0 * Math.sin(angleRad), 2) + 2 * gravity * h0
-            )) / gravity;
-            
-            // Alcance teórico
-            const theoreticalRange = v0 * Math.cos(angleRad) * theoreticalFlightTime;
-            
-            // Altura máxima teórica
-            const theoreticalMaxHeight = h0 + Math.pow(v0 * Math.sin(angleRad), 2) / (2 * gravity);
-            
-            // Dados reais
-            const actualRange = (lastProjectile.x - 80) / 5;
-            const actualMaxHeight = lastProjectile.maxHeight;
-            const actualFlightTime = lastProjectile.flightTime;
-            
-            // Análise do movimento
-            motionAnalysis.innerHTML = `
-                <p>O projétil foi lançado com <strong>${lastProjectile.initialVelocity} m/s</strong> em um ângulo de <strong>${lastProjectile.initialAngle}°</strong> 
-                a uma altura inicial de <strong>${lastProjectile.initialHeight} m</strong>.</p>
-                <p>Durante o movimento, o projétil alcançou uma altura máxima de <strong>${actualMaxHeight.toFixed(1)} m</strong> 
-                e percorreu <strong>${actualRange.toFixed(1)} m</strong> horizontalmente antes de atingir o solo.</p>
-                <p>O tempo total de voo foi de <strong>${actualFlightTime.toFixed(1)} segundos</strong>.</p>
-                ${airResistance > 0 ? `<p><strong>Efeito da resistência do ar:</strong> A resistência do ar (${airResistance}) reduziu o alcance em aproximadamente ${((theoreticalRange - actualRange)/theoreticalRange * 100).toFixed(1)}% comparado ao cenário ideal sem resistência.</p>` : ''}
-                ${wind !== 0 ? `<p><strong>Efeito do vento:</strong> O vento de ${wind} m/s ${wind > 0 ? 'aumentou' : 'reduziu'} o alcance do projétil.</p>` : ''}
-            `;
-            
-            // Comparação com teoria ideal
-            const rangeDiff = ((actualRange - theoreticalRange) / theoreticalRange * 100).toFixed(1);
-            const heightDiff = ((actualMaxHeight - theoreticalMaxHeight) / theoreticalMaxHeight * 100).toFixed(1);
-            
-            rangeComparison.textContent = `${actualRange.toFixed(1)} m (${rangeDiff}%)`;
-            heightComparison.textContent = `${actualMaxHeight.toFixed(1)} m (${heightDiff}%)`;
-            
-            // Eficiência (quanto mais próximo de 100%, melhor)
-            const efficiencyValue = (actualRange / theoreticalRange * 100).toFixed(1);
-            efficiency.textContent = `${efficiencyValue}%`;
-            
-            // Aprendizados principais
-            keyLearnings.innerHTML = `
-                <div class="key-points">
-                    <div class="key-point">
-                        <strong>Ângulo Ótimo</strong>
-                        <p>O ângulo de 45° geralmente proporciona o maior alcance quando a altura inicial é zero e não há resistência do ar.</p>
-                    </div>
-                    <div class="key-point">
-                        <strong>Influência da Altura</strong>
-                        <p>Quanto maior a altura inicial, maior será o alcance horizontal do projétil.</p>
-                    </div>
-                    <div class="key-point">
-                        <strong>Fatores Ambientais</strong>
-                        <p>Resistência do ar e vento afetam significativamente a trajetória real comparada ao modelo ideal.</p>
-                    </div>
-                </div>
-            `;
-            
-            // Conclusão personalizada
-            let conclusion = "Esta simulação demonstra os princípios fundamentais do movimento de projéteis. ";
-            
-            if (airResistance > 0.05) {
-                conclusion += "A resistência do ar teve um impacto significativo na trajetória, reduzindo o alcance e a altura máxima. ";
-            }
-            
-            if (Math.abs(wind) > 5) {
-                conclusion += `O vento de ${wind} m/s desviou a trajetória ${wind > 0 ? 'para a direita' : 'para a esquerda'}. `;
-            }
-            
-            if (lastProjectile.initialAngle < 30) {
-                conclusion += "Com um ângulo de lançamento baixo, o projétil priorizou o movimento horizontal sobre o vertical. ";
-            } else if (lastProjectile.initialAngle > 60) {
-                conclusion += "Com um ângulo de lançamento alto, o projétil alcançou grande altura mas teve alcance horizontal reduzido. ";
+
+        // Atualizar botões de navegação
+        function updateNavigationButtons() {
+            // Botão anterior
+            if (currentQuestion > 0) {
+                prevBtn.classList.remove('hidden');
             } else {
-                conclusion += "O ângulo de lançamento proporcionou um bom equilíbrio entre alcance horizontal e altura máxima. ";
+                prevBtn.classList.add('hidden');
             }
             
-            conclusion += "Experimente diferentes configurações para explorar como os parâmetros afetam a trajetória!";
-            
-            conclusionText.textContent = conclusion;
+            // Botão próximo
+            if (currentQuestion < questions.length - 1) {
+                nextBtn.textContent = 'Próxima';
+            } else {
+                nextBtn.textContent = 'Finalizar';
+            }
         }
-        
-        // Animação
-        function animate() {
-            if (!isRunning) return;
+
+        // Navegar para a próxima pergunta
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                finishQuiz();
+            }
+        });
+
+        // Navegar para a pergunta anterior
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        });
+
+        // Finalizar o quiz
+        function finishQuiz() {
+            // Calcular pontuação
+            score = 0;
+            for (let i = 0; i < questions.length; i++) {
+                if (userAnswers[i] === questions[i].correct) {
+                    score++;
+                }
+            }
             
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawStaticElements();
+            // Atualizar tela de resultados
+            const percentage = Math.round((score / questions.length) * 100);
+            finalScore.textContent = `${percentage}%`;
             
-            let allLanded = true;
-            let activeProjectile = null;
+            // Mensagem personalizada baseada na pontuação
+            if (percentage >= 90) {
+                scoreMessage.textContent = "Excelente! Você é um expert em História do Brasil!";
+            } else if (percentage >= 70) {
+                scoreMessage.textContent = "Muito bom! Você conhece bem a história do nosso país.";
+            } else if (percentage >= 50) {
+                scoreMessage.textContent = "Bom trabalho! Há espaço para aprender mais, mas você já sabe bastante.";
+            } else {
+                scoreMessage.textContent = "Continue estudando! A história do Brasil é fascinante e vale a pena conhecer melhor.";
+            }
             
-            projectiles.forEach(projectile => {
-                if (projectile.landed) {
-                    drawProjectile(projectile);
-                    return;
-                }
+            // Mudar para tela de resultados
+            questionScreen.classList.remove('active');
+            resultsScreen.classList.add('active');
+            quizCompleted = true;
+        }
+
+        // Reiniciar o quiz
+        restartBtn.addEventListener('click', () => {
+            currentQuestion = 0;
+            userAnswers = Array(questions.length).fill(null);
+            score = 0;
+            quizCompleted = false;
+            
+            feedbackContainer.classList.add('hidden');
+            resultsScreen.classList.remove('active');
+            welcomeScreen.classList.add('active');
+        });
+
+        // Revisar respostas
+        reviewBtn.addEventListener('click', () => {
+            feedbackContainer.classList.remove('hidden');
+            feedbackItems.innerHTML = '';
+            
+            questions.forEach((question, index) => {
+                const feedbackItem = document.createElement('div');
+                feedbackItem.classList.add('feedback-item');
                 
-                allLanded = false;
-                activeProjectile = projectile;
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer === question.correct;
                 
-                // Atualizar posição
-                const dt = 0.05 * simulationSpeed;
-                projectile.x += projectile.vx * dt;
-                projectile.y += projectile.vy * dt;
+                feedbackItem.innerHTML = `
+                    <div class="feedback-question">${index + 1}. ${question.question}</div>
+                    <div class="feedback-answer">
+                        Sua resposta: <span class="${isCorrect ? 'feedback-correct' : 'feedback-incorrect'}">${userAnswer !== null ? question.options[userAnswer] : 'Não respondida'}</span>
+                    </div>
+                    <div class="feedback-answer">
+                        Resposta correta: <span class="feedback-correct">${question.options[question.correct]}</span>
+                    </div>
+                    <div class="feedback-answer">${question.explanation}</div>
+                `;
                 
-                // Aplicar gravidade
-                projectile.vy += gravity * dt;
-                
-                // Aplicar resistência do ar
-                projectile.vx -= projectile.vx * airResistance * dt;
-                projectile.vy -= projectile.vy * airResistance * dt;
-                
-                // Aplicar vento
-                projectile.vx += wind * dt;
-                
-                // Registrar trajetória
-                projectile.trail.push({ x: projectile.x, y: projectile.y });
-                
-                // Manter apenas os últimos 100 pontos da trajetória
-                if (projectile.trail.length > 100) {
-                    projectile.trail.shift();
-                }
-                
-                // Atualizar altura máxima
-                const currentHeight = (canvas.height - projectile.y - 50) / 5;
-                if (currentHeight > projectile.maxHeight) {
-                    projectile.maxHeight = currentHeight;
-                }
-                
-                // Verificar se atingiu o solo
-                if (projectile.y >= canvas.height - 50) {
-                    projectile.landed = true;
-                    projectile.y = canvas.height - 50;
-                    
-                    // Atualizar displays apenas para o último projétil ativo
-                    if (projectile === activeProjectile) {
-                        maxHeightDisplay.textContent = `${projectile.maxHeight.toFixed(1)} m`;
-                        horizontalRangeDisplay.textContent = `${((projectile.x - 80) / 5).toFixed(1)} m`;
-                        flightTimeDisplay.textContent = `${projectile.flightTime.toFixed(1)} s`;
-                        
-                        const finalSpeed = Math.sqrt(
-                            projectile.vx * projectile.vx + projectile.vy * projectile.vy
-                        );
-                        finalVelocityDisplay.textContent = `${finalSpeed.toFixed(1)} m/s`;
-                        
-                        // Calcular energias
-                        const kineticEnergy = 0.5 * projectile.mass * finalSpeed * finalSpeed;
-                        const potentialEnergy = projectile.mass * gravity * projectile.maxHeight;
-                        
-                        kineticEnergyDisplay.textContent = `${kineticEnergy.toFixed(1)} J`;
-                        potentialEnergyDisplay.textContent = `${potentialEnergy.toFixed(1)} J`;
-                        
-                        // Mostrar resumo quando todos pousarem
-                        setTimeout(() => {
-                            if (projectiles.every(p => p.landed)) {
-                                showSummary();
-                            }
-                        }, 500);
-                    }
-                }
-                
-                projectile.flightTime += dt;
-                
-                drawProjectile(projectile);
+                feedbackItems.appendChild(feedbackItem);
             });
-            
-            // Atualizar gráfico
-            drawGraph();
-            
-            if (allLanded) {
-                isRunning = false;
-                if (comparisonMode) {
-                    comparisonMode = false;
-                    compareBtn.textContent = '🔍 Modo Comparação';
-                    compareBtn.classList.remove('pulse');
-                }
-                return;
-            }
-            
-            animationId = requestAnimationFrame(animate);
-        }
-        
-        // Desenhar projétil e sua trajetória
-        function drawProjectile(projectile) {
-            // Desenhar trajetória
-            ctx.strokeStyle = projectile.color;
-            ctx.lineWidth = 2;
-            ctx.setLineDash(projectile.trailStyle === 'dashed' ? [5, 5] : []);
-            
-            if (projectile.trail.length > 1) {
-                ctx.beginPath();
-                ctx.moveTo(projectile.trail[0].x, projectile.trail[0].y);
-                
-                for (let i = 1; i < projectile.trail.length; i++) {
-                    if (projectile.trailStyle === 'dots') {
-                        ctx.fillStyle = projectile.color;
-                        ctx.beginPath();
-                        ctx.arc(projectile.trail[i].x, projectile.trail[i].y, 2, 0, Math.PI * 2);
-                        ctx.fill();
-                    } else {
-                        ctx.lineTo(projectile.trail[i].x, projectile.trail[i].y);
-                    }
-                }
-                
-                if (projectile.trailStyle !== 'dots') {
-                    ctx.stroke();
-                }
-            }
-            
-            ctx.setLineDash([]);
-            
-            // Desenhar projétil
-            ctx.fillStyle = projectile.landed ? '#757575' : projectile.color;
-            ctx.beginPath();
-            ctx.arc(projectile.x, projectile.y, 10, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Efeito de brilho
-            if (!projectile.landed) {
-                const glowGradient = ctx.createRadialGradient(
-                    projectile.x, projectile.y, 5, 
-                    projectile.x, projectile.y, 20
-                );
-                glowGradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
-                glowGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                ctx.fillStyle = glowGradient;
-                ctx.fillRect(projectile.x - 20, projectile.y - 20, 40, 40);
-            }
-        }
-        
-        // Iniciar a aplicação
-        init();
+        });
     </script>
 </body>
 </html>
